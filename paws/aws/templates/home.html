@@ -1,0 +1,34 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AWS Management</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+      </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h3 class="neumorphic-h3">AWS Management</h3>
+        <div class="neumorphic-container p-4">
+            <form method="post" action="{% url 'home' %}">
+                {% csrf_token %}
+                <div class="neumorphic-form-group">
+                    <label for="access_key">AWS Access Key:</label>
+                    <input type="text" class="neumorphic-input" id="access_key" name="access_key" required>
+                </div>
+                <div class="neumorphic-form-group">
+                    <label for="secret_key">AWS Secret Key:</label>
+                    <input type="text" class="neumorphic-input" id="secret_key" name="secret_key" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block neumorphic-button">Validate</button>
+            </form>
+            {% if error_message %}
+                <p class="error-message mt-3">{{ error_message }}</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

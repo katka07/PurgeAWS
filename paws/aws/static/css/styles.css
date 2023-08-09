@@ -1,0 +1,191 @@
+/* Neumorphism styles */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  max-width: 400px;
+}
+
+.neumorphic-h3 {
+  font-size: 24px;
+  margin-top: 20px;
+  padding: 12px 20px;
+  background: #f0f0f0;
+  border-radius: 15px;
+  box-shadow: 6px 6px 10px #c9c9c9, -6px -6px 10px #ffffff;
+  transition: background-color 0.3s;
+  text-align: center;
+  white-space: nowrap;
+  display: inline-block;
+}
+.neumorphic-container {
+  background: #f0f0f0;
+  box-shadow: 10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  font-weight: bold;
+  
+}
+
+.neumorphic-form-group {
+  margin-bottom: 20px;
+}
+
+.neumorphic-input {
+  width: 90%;
+  padding: 12px;
+  border: none;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  box-shadow: inset 6px 6px 10px #c9c9c9, inset -6px -6px 10px #ffffff;
+  font-size: 14px;
+  transition: background-color 0.3s;
+  font-family: 'Poppins', sans-serif;
+}
+
+.neumorphic-input:focus {
+  background-color: #e0e0e0;
+}
+
+.neumorphic-button {
+  background-color: #0056b3;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  box-shadow: 6px 6px 10px #c9c9c9, -6px -6px 10px #ffffff;
+}
+
+.neumorphic-button:hover {
+  background-color: #000000;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.options-container {
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #f0f0f0;
+  margin-top: 20px;
+}
+
+.action-button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background-color: #0056b3;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  box-shadow: 6px 6px 10px #c9c9c9, -6px -6px 10px #ffffff;
+}
+
+.action-button:hover {
+  background-color: #000000;
+}
+
+.neumorphic-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.neumorphic-table th,
+.neumorphic-table td {
+  padding: 12px;
+  text-align: left;
+  background-color: #f0f0f0;
+  box-shadow: inset 6px 6px 10px #c9c9c9, inset -6px -6px 10px #ffffff;
+}
+
+.neumorphic-message {
+  padding: 12px;
+  background-color: #f0f0f0;
+  box-shadow: inset 6px 6px 10px #c9c9c9, inset -6px -6px 10px #ffffff;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.neumorphic-resources-container {
+  background: #f0f0f0;
+  box-shadow: 10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.neumorphic-checkbox-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.neumorphic-checkbox {
+  margin-right: 10px;
+  
+}
+
+.neumorphic-button-delete {
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  box-shadow: 6px 6px 10px #c9c9c9, -6px -6px 10px #ffffff;
+}
+
+.neumorphic-button-delete:hover {
+  background-color: #c0392b;
+}
+
+.neumorphic-frameset {
+  background: #f0f0f0;
+  box-shadow: 10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.neumorphic-resource {
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #f0f0f0;
+  box-shadow: 6px 6px 10px #c9c9c9, -6px -6px 10px #ffffff;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

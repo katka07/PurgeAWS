@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AWS Management - Options</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+      </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h3 class="neumorphic-h3">AWS Management - Options</h1>
+        <div class="options-container">
+            <a href="{% url 'list_resources' %}?access_key={{ request.POST.access_key }}&secret_key={{ request.POST.secret_key }}" class="action-button">List My AWS Resources</a>
+            <a href="{% url 'delete_resources' %}" class="action-button">Delete My AWS Resource</a>
+        </div>
+    </div>
+</body>
+</html>

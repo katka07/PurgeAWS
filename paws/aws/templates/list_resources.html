@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AWS Management - List Resources</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+      </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h3 class="neumorphic-h3">AWS Management - List Resources</h1>
+        <div class="resources-container neumorphic-resources-container">
+            {% if resources %}
+            <h2 class="neumorphic-h2">Running Resources</h2>
+            <table class="neumorphic-table">
+                <tr>
+                    <th>Service</th>
+                    <th>Name</th>
+                </tr>
+                {% for resource in resources %}
+                <tr>
+                    <td>{{ resource.service }}</td>
+                    <td>{{ resource.name }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <p class="neumorphic-message">{{ no_resources_message }}</p>
+            {% endif %}
+        </div>
+        <br />
+        <form action="{% url 'options' %}" method="get">
+            <button type="submit" class="btn btn-primary neumorphic-button">Back to Options</button>
+        </form>
+    </div>
+</body>
+</html>

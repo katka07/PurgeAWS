@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AWS Management - Delete Resources</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h3 class="neumorphic-h3">AWS Management - Delete Resources</h3>
+        <form method="post" action="{% url 'delete_resources' %}">
+            {% csrf_token %}
+            <div class="neumorphic-frameset">
+                <h4 class="neumorphic-h4">Select Resources to Delete:</h3>
+                <label class="neumorphic-checkbox-label">
+                    <input type="checkbox" id="select-all-checkbox" class="neumorphic-checkbox"> Select All
+                </label>
+                <ul>
+                    {% for resource in resources %}
+                    <li>
+                        <label class="neumorphic-checkbox-label">
+                            <input type="checkbox" name="selected_resources" value="{{ resource.service }}:{{ resource.name }}" class="neumorphic-checkbox">
+                            {{ resource.service }}: {{ resource.name }}
+                        </label>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <br/>
+                <button type="submit" class="btn btn-danger btn-block neumorphic-button-delete">Delete Selected Resources</button>
+            </div>
+        </form>
+        <a href="{% url 'list_resources' %}" class="action-button">Back to List</a>
+        <a href="{% url 'options' %}" class="action-button">Back to Options</a>
+    </div>
+    <script>
+        document.getElementById('select-all-checkbox').addEventListener('change', function() {
+            var checkboxes = document.getElementsByName('selected_resources');
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = this.checked;
+            }
+        });
+    </script>
+</body>
+</html>
