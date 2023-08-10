@@ -42,10 +42,15 @@ def list_resources(request):
 
     try:
         resources = get_resources_list(access_key, secret_key)
-        return render(request, 'list_resources.html', {'resources': resources})
+        if resources:
+            return render(request, 'list_resources.html', {'resources': resources})
+        else:
+            no_resources_message = "No running resources found."
+            return render(request, 'list_resources.html', {'no_resources_message': no_resources_message})
     except Exception as e:
         error_message = f"Error: {str(e)}"
         return render(request, 'list_resources.html', {'error_message': error_message})
+
 
 # ==========================================================================================
 
