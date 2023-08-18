@@ -1,39 +1,59 @@
 {% load static %}
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>AWS Management - List Resources</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
-      </style>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resources by Region</title>
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+<script>
+function updateTable(selectedKey) {
+    var dictionary = {{ resources_by_region|safe }};
+
+    var tableBody = document.getElementById("table-body");
+    tableBody.innerHTML = "";  // Clear the table body
+
+    if (selectedKey) {
+        var selectedValues = dictionary[selectedKey];
+
+        for (var i = 0; i < selectedValues.length; i++) {
+            var row = tableBody.insertRow();
+            var serviceCell = row.insertCell(0);
+            var nameCell = row.insertCell(1);
+
+            serviceCell.innerHTML = selectedValues[i].service;
+            nameCell.innerHTML = selectedValues[i].name;
+        }
+    }
+}
+</script>
+
 </head>
 <body>
-    <div class="container">
-        <h3 class="neumorphic-h3">AWS Management - List Resources</h1>
-        <div class="resources-container neumorphic-resources-container">
-            {% if resources %}
-            <h2 class="neumorphic-h2">Running Resources</h2>
-            <table class="neumorphic-table">
+<div class="container">
+    <h3 class="neumorphic-h3">AWS Management - List Resources by Region</h1>
+    <div class="neumorphic-container">
+        <label for="key-dropdown">Select a region:</label>
+        <select id="key-dropdown" onchange="updateTable(this.value)">
+            <option value="" selected disabled>Select a region</option>
+            {% for key, values in resources_by_region.items %}
+                <option value="{{ key }}">{{ key }}</option>
+            {% endfor %}
+        </select>
+        <table class="neumorphic-table">
+            <thead>
                 <tr>
                     <th>Service</th>
                     <th>Name</th>
                 </tr>
-                {% for resource in resources %}
-                <tr>
-                    <td>{{ resource.service }}</td>
-                    <td>{{ resource.name }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-            {% else %}
-            <p class="neumorphic-message">{{ no_resources_message }}</p>
-            {% endif %}
-        </div>
-        <br />
-        <form action="{% url 'options' %}" method="get">
-            <button type="submit" class="btn btn-primary neumorphic-button">Back to Options</button>
-        </form>
+            </thead>
+            <tbody id="table-body">
+                <!-- Table content will be dynamically updated here -->
+            </tbody>
+        </table>
     </div>
+    <a href="{% url 'options' %}" class="action-button">Back to Options</a>
+</div>
 </body>
 </html>

@@ -2,7 +2,7 @@ import boto3
 from botocore.exceptions import NoCredentialsError
 from django.shortcuts import render, redirect
 from .models import AWSUser, Resource
-import logging
+import logging, os
 logging.getLogger('botocore').setLevel(logging.DEBUG)
 
 # ==========================================================================================
@@ -41,9 +41,14 @@ def list_resources(request):
     secret_key = request.session.get('secret_key')  # Retrieve secret key from session
 
     try:
-        resources = get_resources_list(access_key, secret_key)
-        if resources:
-            return render(request, 'list_resources.html', {'resources': resources})
+        resources_by_region = get_resources_by_region(access_key, secret_key)
+        
+        filtered_resources_by_region = {key: value for key, value in resources_by_region.items() if value}
+        print("\n=============\n")
+        print(filtered_resources_by_region)
+        print("\n=============\n")
+        if filtered_resources_by_region :
+            return render(request, 'list_resources.html', {'resources_by_region': filtered_resources_by_region })
         else:
             no_resources_message = "No running resources found."
             return render(request, 'list_resources.html', {'no_resources_message': no_resources_message})
@@ -51,6 +56,22 @@ def list_resources(request):
         error_message = f"Error: {str(e)}"
         return render(request, 'list_resources.html', {'error_message': error_message})
 
+
+# ==========================================================================================
+
+def get_resources_by_region(access_key, secret_key):
+    resources_by_region = {}
+
+    get_regions = boto3.client('ec2')
+    regions = get_regions.describe_regions()['Regions']
+    region_names = [region['RegionName'] for region in regions]
+    
+    for name in region_names:
+        os.environ['AWS_DEFAULT_REGION'] = name
+        resources = get_resources_list(access_key, secret_key)
+        resources_by_region[name] = resources
+
+    return resources_by_region
 
 # ==========================================================================================
 
@@ -74,23 +95,45 @@ def get_resources_list(access_key, secret_key):
     for group in security_groups['SecurityGroups']:
             if group['GroupName'] != 'default':
                 resources.append({'service': 'SecurityGroup', 'name': group['GroupName']})
-
-    # Fetch S3 buckets
-    s3_buckets = s3_client.list_buckets()
-    for bucket in s3_buckets['Buckets']:
-        resources.append({'service': 'S3', 'name': bucket['Name']})
-
-    # Fetch RDS instances
+    
+    # Fetch RDS instances and their dependent snapshots
     rds_instances = rds_client.describe_db_instances()
     for instance in rds_instances['DBInstances']:
         resources.append({'service': 'RDS', 'name': instance['DBInstanceIdentifier']})
+        snapshots = rds_client.describe_db_snapshots(DBInstanceIdentifier=instance['DBInstanceIdentifier'])
+        for snapshot in snapshots['DBSnapshots']:
+            resources.append({'service': 'RDS Snapshot', 'name': snapshot['DBSnapshotIdentifier']})
+    
+    # Fetch S3 buckets and their dependent objects
+    s3_buckets = s3_client.list_buckets()
+    for bucket in s3_buckets['Buckets']:
+        resources.append({'service': 'S3', 'name': bucket['Name']})
+        objects = s3_client.list_objects(Bucket=bucket['Name'])
+        if 'Contents' in objects:
+            for obj in objects['Contents']:
+                resources.append({'service': 'S3 Object', 'name': obj['Key']})
 
-    # Fetch VPCs
-    vpcs = ec2_resource.vpcs.filter(Filters=[{'Name': 'isDefault', 'Values': ['false']}])
+    # Fetch VPCs and their associated subnets
+    vpcs = ec2_resource.vpcs.filter(Filters=[{'Name': 'isDefault', 'Values': ['true']}])
     for vpc in vpcs:
         resources.append({'service': 'VPC', 'name': vpc.id})
+        subnets = list(vpc.subnets.all())
+        for subnet in subnets:
+            resources.append({'service': 'Subnet', 'name': subnet.id})
+    
+    # Fetch Route Tables
+    route_tables = ec2_client.describe_route_tables()
+    for route_table in route_tables['RouteTables']:
+        resources.append({'service': 'RouteTable', 'name': route_table['RouteTableId']})
+
+    # Fetch Internet Gateways
+    internet_gateways = ec2_client.describe_internet_gateways()
+    for internet_gateway in internet_gateways['InternetGateways']:
+        resources.append({'service': 'InternetGateway', 'name': internet_gateway['InternetGatewayId']})
 
     return resources
+
+# ==========================================================================================
 
 def delete_resources(request):
     if request.method == 'POST':
@@ -129,4 +172,3 @@ def delete_resources(request):
     return render(request, 'delete_resources.html', {'resources': resources})
 
 # ==========================================================================================
-
